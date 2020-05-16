@@ -1,0 +1,33 @@
+""""
+If not yet done you first need to intall tweepy with the line below:
+    
+    pip install tweepy
+"""
+
+import pandas as pd
+import tweepy
+
+#Load in the specific dataset
+datafile = "2020-03-23-dataset.tsv"
+all_tweets_march23 = pd.read_csv(datafile, sep='\t')
+
+#Convert the string that display the time into time objects
+all_tweets_march23['time'] = pd.to_timedelta(all_tweets_march23['time'])
+
+#Set a filter on which times you want to look at and filter the rest out
+mask_for_lockdown = (all_tweets_march23['time'] >= '19:30:00') & (all_tweets_march23['time'] <= '21:30:00')
+all_tweets_march23_hourBeforeAndAfter = all_tweets_march23.loc[mask_for_lockdown]
+
+
+#These are necassery to access the twitterAPI
+CONSUMER_KEY = "<your API key>"
+CONSUMER_SECRET = "<your API secret key>"
+OAUTH_TOKEN = "<your access token>"
+OAUTH_TOKEN_SECRET = "<your access token scret>"
+
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+api = tweepy.API(auth)
+
+#This will return the content of the tweet
+tweet = twitter.show_status(id=id_of_tweet)
